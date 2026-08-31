@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; background: #090A0F; color-scheme: dark; }
+  body {
+    background: #090A0F;
+    color: #F2F3F7;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: rgba(167,139,250,0.3); }
+  :focus-visible { outline: 2px solid #A78BFA; outline-offset: 2px; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.08); border-radius: 8px;
+    border: 3px solid #090A0F;
+  }
+}
+
+@layer components {
+  /* The module.
+     Flat fills at uniform opacity are what makes a set of cards read as
+     machine-made. These are lit instead: a real backdrop blur, a diagonal
+     gradient so the top-left catches light, an inner top highlight, and a
+     shadow deep enough to sit them in the field rather than on it. */
+  .mod {
+    background:
+      linear-gradient(152deg,
+        rgba(255,255,255,0.075) 0%,
+        rgba(255,255,255,0.028) 38%,
+        rgba(255,255,255,0.010) 100%),
+      rgba(16,18,26,0.72);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 18px;
+    backdrop-filter: blur(18px) saturate(1.3);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.09),
+      inset 0 -1px 0 rgba(0,0,0,0.4),
+      0 18px 48px -16px rgba(0,0,0,0.85);
+  }
+  .mod-sunk {
+    background: rgba(8,9,14,0.55);
+    border: 1px solid rgba(255,255,255,0.055);
+    border-radius: 13px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+
+  /* A card that leads with a title. The old ones set the heading at 13-14px,
+     the same size as the body under it, which is why nothing read as a title
+     on first pass. */
+  .card-title {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+    color: #F5F6FA;
+  }
+  .card-body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #B3BAC9;      /* was #8A92A6 — it camouflaged against the panel */
+  }
+  .card-meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+  }
+
+  .label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #646B80;
+  }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* Pill controls, the way every reference uses them. */
+  .seg {
+    display: inline-flex; gap: 2px; padding: 3px;
+    background: #0E1017; border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 9999px;
+  }
+  .seg > button {
+    font-size: 12px; font-weight: 500; padding: 7px 16px;
+    border-radius: 9999px; color: #9BA1B4;
+    transition: all .2s ease;
+  }
+  .seg > button:hover { color: #F2F3F7; }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 500;
+    padding: 4px 10px; border-radius: 9999px;
+  }
+
+  .lamp {
+    position: absolute; border-radius: 9999px; pointer-events: none;
+    filter: blur(80px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+
+/* ---- mathematics -------------------------------------------------------
+   KaTeX ships its own colour and sizing; both need overriding so equations
+   sit inside the dark surfaces rather than looking pasted on top of them. */
+.katex { font-size: 1.04em; }
+.katex-block {
+  margin: 0.55rem 0;
+  text-align: left;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.15rem 0;
+}
+.katex-block .katex-display { margin: 0; text-align: left; }
+.katex-block .katex-display > .katex { text-align: left; }
+.katex .mord, .katex .mbin, .katex .mrel, .katex .mopen, .katex .mclose,
+.katex .mpunct, .katex .minner, .katex .mop { color: inherit; }
+.katex-inline { white-space: nowrap; }
+
+/* Interface chrome that must stay sans, whatever the body font is. */
+button, .chip, .seg > button, input, select { font-family: 'Instrument Sans', system-ui, sans-serif; }
+.mono, .rec { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+
+/* ---- axes and chart furniture ------------------------------------------
+   Every chart states what its axes are. A judge cannot read an outcome off a
+   line whose coordinates are unnamed, and several of ours had none. */
+.axis-label {
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-size: 11px;
+  fill: #939BAD;
+  color: #939BAD;
+}
+.axis-tick {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 9.5px;
+  fill: #6E7688;
+}
+
+/* Prose inside cards. Serif, and large enough to read at arm's length from a
+   projector rather than at laptop distance. */
+.prose-sm { font-size: 14px;  line-height: 1.62; color: #B3BAC9; }
+.prose    { font-size: 15.5px; line-height: 1.64; color: #C3C9D6; }
+.prose-lg { font-size: 17px;  line-height: 1.6;  color: #DDE1EA; }
